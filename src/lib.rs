@@ -67,7 +67,10 @@ pub fn transform_sql_to_csv(input: &str) -> Result<String, Error> {
         wtr.write_record(record.iter())?;
     }
 
-    Ok(String::from_utf8(wtr.into_inner()?)?)
+    let mut res = String::from_utf8(wtr.into_inner()?)?;
+    // removes trailing \n
+    let _ = res.pop();
+    Ok(res)
 }
 
 #[cfg(test)]
