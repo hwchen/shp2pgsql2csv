@@ -1,9 +1,9 @@
 extern crate failure;
-extern crate sqltocsv;
+extern crate shp2pgsql2csv;
 
 use failure::Error;
 use std::io::{self, Read};
-use sqltocsv::transform_sql_to_csv;
+use shp2pgsql2csv::transform_sql_to_csv;
 
 fn main() -> Result<(), Error> {
 

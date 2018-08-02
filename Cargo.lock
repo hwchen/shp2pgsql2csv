@@ -139,7 +139,7 @@ version = "1.0.70"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
-name = "sqltocsv"
+name = "shp2pgsql2csv"
 version = "0.1.0"
 dependencies = [
  "csv 1.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
