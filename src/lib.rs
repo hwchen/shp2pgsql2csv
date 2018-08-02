@@ -14,6 +14,7 @@ extern crate failure;
 extern crate lazy_static;
 extern crate regex;
 
+use csv::{ReaderBuilder, Writer};
 use failure::Error;
 use regex::Regex;
 
@@ -21,7 +22,7 @@ use regex::Regex;
 pub fn transform_sql_to_csv(input: &str) -> Result<String, Error> {
     // first match on the insert
     lazy_static! {
-        static ref RE_CREATE_TABLE: Regex = Regex::new("(?i)create table(?-i).+?(?i)values(?-i) ").unwrap();
+//        static ref RE_CREATE_TABLE: Regex = Regex::new("(?i)create table(?-i).+?(?i)values(?-i) ").unwrap();
         static ref RE_INSERT: Regex = Regex::new("(?i)insert into(?-i).+?(?i)values(?-i) ").unwrap();
         static ref RE_END: Regex = Regex::new("(?i)commit;analyze(?-i)").unwrap();
     }
@@ -54,9 +55,19 @@ pub fn transform_sql_to_csv(input: &str) -> Result<String, Error> {
 
     // now read buf into csv and then out again?
     // So that I get consistent double quoting
+    let mut rdr = ReaderBuilder::new()
+        .has_headers(false)
+        .quote(b'\'')
+        .from_reader(buf.as_bytes());
 
+    let mut wtr = Writer::from_writer(vec![]);
 
-    Ok(buf)
+    for result in rdr.records() {
+        let record = result?;
+        wtr.write_record(record.iter())?;
+    }
+
+    Ok(String::from_utf8(wtr.into_inner()?)?)
 }
 
 #[cfg(test)]
