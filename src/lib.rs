@@ -41,13 +41,12 @@ pub fn transform_sql_to_csv(input: &str) -> Result<String, Error> {
         buf.push_str(row);
         buf.push_str("\n");
     }
-    println!("{:?}", buf);
 
     // now read buf into csv and then out again?
     // So that I get consistent double quoting
 
 
-    Ok(input.to_owned())
+    Ok(buf)
 }
 
 #[cfg(test)]
